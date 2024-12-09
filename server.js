@@ -1,7 +1,6 @@
 import env from "dotenv";
 import cors from "cors";
 import express from "express";
-import pg from "pg";
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 import { getPgVersion } from "./config/dbConfig.js";
 
