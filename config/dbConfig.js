@@ -5,7 +5,7 @@ import pg from "pg";
 let { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, PGPORT } = process.env;
 PGPASSWORD = decodeURIComponent(PGPASSWORD);
 
-const db = new pg.Client({
+export const db = new pg.Client({
   host: PGHOST,
   database: PGDATABASE,
   username: PGUSER,
@@ -23,5 +23,7 @@ export const getPgVersion = async () => {
     console.log(res.rows[0].version);
   } catch (err) {
     console.log("Database Error", err);
+  } finally {
+    await db.end();
   }
 };
