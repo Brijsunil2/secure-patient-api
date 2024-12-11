@@ -1,4 +1,4 @@
-export const createPersonTableQuery = `
+export const createPersonTable = `
 CREATE TABLE IF NOT EXISTS person (
   id SERIAL PRIMARY KEY,
   firstname VARCHAR(50) NOT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS person (
 );
 `;
 
-export const createHealthCardInfoTableQuery = `
+export const createHealthCardInfoTable = `
 CREATE TABLE IF NOT EXISTS health_card_info (
   id SERIAL PRIMARY KEY,
   person_id INTEGER REFERENCES person(id) ON DELETE CASCADE,
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS health_card_info (
 );
 `;
 
-export const createContactInfoTableQuery = `
+export const createContactInfoTable = `
 CREATE TABLE IF NOT EXISTS contact_info (
   id SERIAL PRIMARY KEY,
   person_id INTEGER REFERENCES person(id) ON DELETE CASCADE,
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS contact_info (
 );
 `;
 
-export const createMedicalHistoryTableQuery = `
+export const createMedicalHistoryTable = `
 CREATE TABLE IF NOT EXISTS medical_history (
   id SERIAL PRIMARY KEY,
   person_id INTEGER REFERENCES person(id) ON DELETE CASCADE,
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS medical_history (
 );
 `;
 
-export const createPatientVisitInfoTableQuery = `
+export const createPatientVisitInfoTable = `
 CREATE TABLE IF NOT EXISTS patient_visit_info (
   id SERIAL PRIMARY KEY,
   person_id INTEGER REFERENCES person(id) ON DELETE CASCADE,
