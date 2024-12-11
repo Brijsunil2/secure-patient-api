@@ -2,7 +2,7 @@ import env from "dotenv";
 import cors from "cors";
 import express from "express";
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
-import { getPgVersion } from "./config/dbConfig.js";
+import { getPgVersion, initDBTables } from "./config/dbConfig.js";
 
 env.config();
 const app = express();
@@ -13,6 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 getPgVersion();
+initDBTables();
 
 app.get("/", (req, res) => {
   res.send("Server is running.");

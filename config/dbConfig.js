@@ -1,6 +1,13 @@
 import dotenv from "dotenv";
 dotenv.config();
 import pg from "pg";
+import {
+  createPersonTable,
+  createHealthCardInfoTable,
+  createContactInfoTable,
+  createMedicalHistoryTable,
+  createPatientVisitInfoTable,
+} from "../queries/initQueries.js";
 
 let { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, PGPORT } = process.env;
 PGPASSWORD = decodeURIComponent(PGPASSWORD);
@@ -23,7 +30,17 @@ export const getPgVersion = async () => {
     console.log(res.rows[0].version);
   } catch (err) {
     console.log("Database Error", err);
-  } finally {
-    await db.end();
-  }
+  } 
+};
+
+export const initDBTables = async () => {
+  try {
+    let res = await db.query(createPersonTable);
+    res = await db.query(createHealthCardInfoTable);
+    res = await db.query(createContactInfoTable);
+    res = await db.query(createMedicalHistoryTable);
+    res = await db.query(createPatientVisitInfoTable);
+  } catch (err) {
+    console.log("Database Error", err);
+  } 
 };
