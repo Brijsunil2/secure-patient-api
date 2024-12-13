@@ -29,10 +29,36 @@ INSERT INTO patient_visit_info (person_id, reason_for_visit, patient_pain_rating
   VALUES ($1, $2, $3, $4);
 `;
 
-const getPersonByHealthCardNumber = `
+const getPersonIDByHealthCardNumber = `
 SELECT person_id
   FROM health_card_info
   WHERE health_card_number = $1;
+`;
+
+const getPersonByID = `
+SELECT *
+  FROM person
+  WHERE id = $1
+`;
+
+const getPersonInfoByID = `
+SELECT
+  p.id AS person_id,
+  p.firstname,
+  p.lastname,
+  p.date_of_birth,
+  p.gender,
+  p.address,
+  h.health_card_number,
+  c.primary_phone_number,
+  c.secondary_phone_number,
+  c.emergency_contact,
+  c.emergency_contact_relationship,
+  c.email,
+FROM person p
+LEFT JOIN health_card_info h ON p.id = h.person_id
+LEFT JOIN contact_info c ON p.id = c.person_id
+WHERE p.id = $1;
 `;
 
 export {
@@ -41,6 +67,8 @@ export {
   insertContactInfo,
   insertMedicalHistory,
   insertPatientVisitInfo,
-  getPersonByHealthCardNumber,
-  updateContactInfo
+  getPersonIDByHealthCardNumber,
+  updateContactInfo,
+  getPersonByID,
+  getPersonInfoByID
 };
