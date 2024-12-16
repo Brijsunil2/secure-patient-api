@@ -9,10 +9,11 @@ import {
   createPatientVisitInfoTable,
 } from "../queries/initQueries.js";
 
+const { Pool } = pg;
 let { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, PGPORT } = process.env;
 PGPASSWORD = decodeURIComponent(PGPASSWORD);
 
-export const db = new pg.Client({
+export const pool = new Pool({
   host: PGHOST,
   database: PGDATABASE,
   username: PGUSER,
@@ -24,23 +25,28 @@ export const db = new pg.Client({
 });
 
 export const getPgVersion = async () => {
-  await db.connect();
+  const client = await pool.connect();
   try {
-    const res = await db.query("SELECT version()");
+    const res = await client.query("SELECT version()");
     console.log(res.rows[0].version);
   } catch (err) {
     console.log("Database Error", err);
-  } 
+  } finally {
+    client.release();
+  }
 };
 
 export const initDBTables = async () => {
+  const client = await pool.connect();
   try {
-    let res = await db.query(createPersonTable);
-    res = await db.query(createHealthCardInfoTable);
-    res = await db.query(createContactInfoTable);
-    res = await db.query(createMedicalHistoryTable);
-    res = await db.query(createPatientVisitInfoTable);
+    let res = await client.query(createPersonTable);
+    res = await client.query(createHealthCardInfoTable);
+    res = await client.query(createContactInfoTable);
+    res = await client.query(createMedicalHistoryTable);
+    res = await client.query(createPatientVisitInfoTable);
   } catch (err) {
     console.log("Database Error", err);
-  } 
+  } finally {
+    client.release();
+  }
 };
