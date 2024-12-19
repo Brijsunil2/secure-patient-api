@@ -54,11 +54,31 @@ SELECT
   c.secondary_phone_number,
   c.emergency_contact,
   c.emergency_contact_relationship,
-  c.email,
+  c.email 
 FROM person p
 LEFT JOIN health_card_info h ON p.id = h.person_id
 LEFT JOIN contact_info c ON p.id = c.person_id
 WHERE p.id = $1;
+`;
+
+const getPersonInfoByHealthCardNumber = `
+SELECT
+  p.id AS person_id,
+  p.firstname,
+  p.lastname,
+  p.date_of_birth,
+  p.gender,
+  p.address,
+  h.health_card_number,
+  c.primary_phone_number,
+  c.secondary_phone_number,
+  c.emergency_contact,
+  c.emergency_contact_relationship,
+  c.email 
+FROM person p
+LEFT JOIN health_card_info h ON p.id = h.person_id
+LEFT JOIN contact_info c ON p.id = c.person_id
+WHERE h.health_card_number = $1;
 `;
 
 export {
@@ -70,5 +90,6 @@ export {
   getPersonIDByHealthCardNumber,
   updateContactInfo,
   getPersonByID,
-  getPersonInfoByID
+  getPersonInfoByID,
+  getPersonInfoByHealthCardNumber
 };
