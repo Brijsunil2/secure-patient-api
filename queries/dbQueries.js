@@ -93,3 +93,41 @@ export {
   getPersonInfoByID,
   getPersonInfoByHealthCardNumber
 };
+
+
+
+// {
+//   patientInfo: {
+//     healthCardInfo: { healthCardNumber: '3732-743-243-HS' },
+//     firstName: 'John',
+//     lastName: 'Doe',
+//     dateOfBirth: '2024-12-10',
+//     gender: 'Male',
+//     address: '2401 City Park Dr',
+//     contactInformation: {
+//       primaryPhoneNumber: '+1 505-586-5454',
+//       secondaryPhoneNumber: '+1 455-555-5545',
+//       emergencyContact: '+1 543-543-5345',
+//       emergencyContactRelationship: 'Necessitatibus itaqu',
+//       email: '123john@test.ca'
+//     },
+//     locked: false
+//   },
+//   visitInfo: {
+//     visitInfo: {
+//       reasonForVisit: '',
+//       patientPainRating: 0,
+//       symptoms: [],
+//       medicalHistory: [Object]
+//     },
+//     reasonForVisit: 'hfdgf',
+//     patientPainRating: 3,
+//     symptoms: [ 'joe' ],
+//     medicalHistory: {
+//       currentMedications: [Array],
+//       allergies: 'gfdg',
+//       chronicConditions: 'gdfg'
+//     }
+//   },
+//   patientAcknowledgement: '2024-12-19T01:43:03.695Z'
+// }
