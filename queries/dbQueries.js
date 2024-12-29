@@ -1,5 +1,24 @@
 import { pool } from "../config/dbConfig.js";
 
+const dbQuery = async (query, values) => {
+  const client = await pool.connect();
+
+  try {
+    const result = await client.query(query, values);
+
+    if (result.rowCount !== 0) {
+      return result;
+    }
+  } catch (err) {
+    console.log("Database Error", err);
+    res.status(500).json({ message: "Database Error" });
+  } finally {
+    client.release();
+  }
+
+  return null;
+};
+
 const insertPerson = `
 INSERT INTO person (firstname, lastname, date_of_birth, gender, address)
   VALUES ($1, $2, $3, $4, $5)
@@ -37,22 +56,9 @@ const getPersonIDByHealthCardNumber = async (healthCardNumber) => {
     FROM health_card_info
     WHERE health_card_number = $1;
   `;
-  const client = await pool.connect();
-  
-  try {
-    const result = await client.query(query, [healthCardNumber]);
 
-    if (result.rowCount !== 0) {
-      return result.rows[0].id;
-    }
-  } catch (err) {
-    console.log("Database Error", err);
-    res.status(500).json({ message: "Database Error" });
-  } finally {
-    client.release();
-  }
-
-  return -1;
+  const result = await dbQuery(query, [healthCardNumber]);
+  return result.rowCount !== 0 ? result.rows[0].id : null;
 };
 
 const getPersonByID = `
@@ -102,24 +108,10 @@ const getPersonInfoByHealthCardNumber = async (healthCardNumber) => {
   WHERE h.health_card_number = $1;
   `;
 
-  const client = await pool.connect();
-  
-  try {
-    const result = await client.query(query, [healthCardNumber]);
+  const result = await dbQuery(query, [healthCardNumber]);
 
-    if (result.rowCount !== 0) {
-      return result.rows[0];
-    }
-  } catch (err) {
-    console.log("Database Error", err);
-    res.status(500).json({ message: "Database Error" });
-  } finally {
-    client.release();
-  }
-
-  return null;
-}
- 
+  return result.rowCount !== 0 ? result.rows[0] : null;
+};
 
 export {
   insertPerson,
