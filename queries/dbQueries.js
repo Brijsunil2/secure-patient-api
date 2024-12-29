@@ -19,11 +19,16 @@ const dbQuery = async (query, values) => {
   return null;
 };
 
-const insertPerson = `
-INSERT INTO person (firstname, lastname, date_of_birth, gender, address)
-  VALUES ($1, $2, $3, $4, $5)
-  RETURNING id;
-`;
+const insertPerson = async (firstname, lastname, date_of_birth, gender, address) => {
+  const query = `
+  INSERT INTO person (firstname, lastname, date_of_birth, gender, address)
+    VALUES ($1, $2, $3, $4, $5)
+    RETURNING id;
+  `;
+
+  const result = await dbQuery(query, [firstname, lastname, date_of_birth, gender, address]);
+  return result;
+};
 
 const insertHealthCardInfo = `
 INSERT INTO health_card_info (person_id, health_card_number)

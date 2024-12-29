@@ -6,6 +6,7 @@ import {
 } from "../queries/dbQueries.js";
 
 export const submitTriageCheckIn = asyncHandler(async (req, res) => {
+  console.log(req.body)
   const healthCardNumber = req.body.patientInfo.healthCardInfo.healthCardNumber;
   const patientInfo = req.body.patientInfo;
   const contactInfo = req.body.patientInfo.contactInformation;
@@ -13,9 +14,8 @@ export const submitTriageCheckIn = asyncHandler(async (req, res) => {
 
   const personID = getPersonIDByHealthCardNumber(healthCardNumber);
 
-  if (personID) {
-    
-  }
+
+  res.status(200);
 });
 
 export const getPatientInfoByHealthCardNumber = asyncHandler(
