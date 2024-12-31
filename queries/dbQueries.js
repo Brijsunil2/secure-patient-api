@@ -77,7 +77,7 @@ const getPersonIDByHealthCardNumber = async (healthCardNumber) => {
   `;
 
   const result = await dbQuery(query, [healthCardNumber]);
-  return result.rowCount !== 0 ? result.rows[0].person_id : null;
+  return result && result.rowCount !== 0 ? result.rows[0].person_id : null;
 };
 
 const getPersonByID = async (personID) => {
@@ -88,7 +88,7 @@ const getPersonByID = async (personID) => {
   `;
 
   const result = await dbQuery(query, [personID]);
-  return result.rowCount !== 0 ? result.rows[0] : null;
+  return result && result.rowCount !== 0 ? result.rows[0] : null;
 };
 
 const getContactInfoByPersonID = async (personID) => {
@@ -99,7 +99,7 @@ const getContactInfoByPersonID = async (personID) => {
   `;
 
   const result = await dbQuery(query, [personID]);
-  return result.rowCount !== 0 ? result.rows[0] : null;
+  return result && result.rowCount !== 0 ? result.rows[0] : null;
 };
 
 const getPersonInfoByID = `
@@ -145,7 +145,7 @@ const getPersonInfoByHealthCardNumber = async (healthCardNumber) => {
 
   const result = await dbQuery(query, [healthCardNumber]);
 
-  return result.rowCount !== 0 ? result.rows[0] : null;
+  return result && result.rowCount !== 0 ? result.rows[0] : null;
 };
 
 export {

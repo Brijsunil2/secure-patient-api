@@ -19,9 +19,12 @@ export const getPatientInfoByHealthCardNumber = asyncHandler(
     const healthCardNumber = req.query.healthCardNumber;
 
     const personID = await getPersonIDByHealthCardNumber(healthCardNumber);
-    const patientInfo = await getPersonByID(personID);
-    const contactInfo = await getContactInfoByPersonID(personID);
-
-    res.json({ patientInfo, contactInfo });
+    if (personID) {
+      const patientInfo = await getPersonByID(personID);
+      const contactInfo = await getContactInfoByPersonID(personID);
+      res.json({ patientInfo, contactInfo });
+    } else {
+      res.status(404).json({ message: "Health card number does not exist."})
+    }
   }
 );
