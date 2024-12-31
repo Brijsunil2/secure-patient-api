@@ -19,21 +19,35 @@ const dbQuery = async (query, values) => {
   return null;
 };
 
-const insertPerson = async (firstname, lastname, date_of_birth, gender, address) => {
+const insertPerson = async (
+  firstname,
+  lastname,
+  date_of_birth,
+  gender,
+  address
+) => {
   const query = `
   INSERT INTO person (firstname, lastname, date_of_birth, gender, address)
     VALUES ($1, $2, $3, $4, $5)
     RETURNING id;
   `;
 
-  const result = await dbQuery(query, [firstname, lastname, date_of_birth, gender, address]);
+  const result = await dbQuery(query, [
+    firstname,
+    lastname,
+    date_of_birth,
+    gender,
+    address,
+  ]);
   return result;
 };
 
-const insertHealthCardInfo = `
-INSERT INTO health_card_info (person_id, health_card_number)
-  VALUES ($1, $2);
-`;
+const insertHealthCardInfo = async () => {
+  const query = `
+  INSERT INTO health_card_info (person_id, health_card_number)
+    VALUES ($1, $2);
+  `;
+};
 
 const insertContactInfo = `
 INSERT INTO contact_info (person_id, primary_phone_number, secondary_phone_number, emergency_contact, emergency_contact_relationship, email)
@@ -63,14 +77,30 @@ const getPersonIDByHealthCardNumber = async (healthCardNumber) => {
   `;
 
   const result = await dbQuery(query, [healthCardNumber]);
-  return result.rowCount !== 0 ? result.rows[0].id : null;
+  return result.rowCount !== 0 ? result.rows[0].person_id : null;
 };
 
-const getPersonByID = `
-SELECT *
-  FROM person
-  WHERE id = $1
-`;
+const getPersonByID = async (personID) => {
+  const query = `
+  SELECT *
+    FROM person
+    WHERE id = $1
+  `;
+
+  const result = await dbQuery(query, [personID]);
+  return result.rowCount !== 0 ? result.rows[0] : null;
+};
+
+const getContactInfoByPersonID = async (personID) => {
+  const query = `
+  SELECT *
+    FROM contact_info
+    WHERE person_id = $1
+  `;
+
+  const result = await dbQuery(query, [personID]);
+  return result.rowCount !== 0 ? result.rows[0] : null;
+};
 
 const getPersonInfoByID = `
 SELECT
@@ -129,6 +159,7 @@ export {
   getPersonByID,
   getPersonInfoByID,
   getPersonInfoByHealthCardNumber,
+  getContactInfoByPersonID,
 };
 
 // {
