@@ -42,32 +42,79 @@ const insertPerson = async (
   return result;
 };
 
-const insertHealthCardInfo = async () => {
+const insertHealthCardInfo = async (person_id, health_card_info) => {
   const query = `
   INSERT INTO health_card_info (person_id, health_card_number)
     VALUES ($1, $2);
   `;
+
+  const result = await dbQuery(query, [person_id, health_card_info]);
+  return result;
 };
 
-const insertContactInfo = `
-INSERT INTO contact_info (person_id, primary_phone_number, secondary_phone_number, emergency_contact, emergency_contact_relationship, email)
-  VALUES ($1, $2, $3, $4, $5, $6);
-`;
+const insertContactInfo = async () => {
+  const query = `
+  INSERT INTO contact_info (person_id, primary_phone_number, secondary_phone_number, emergency_contact, emergency_contact_relationship, email)
+    VALUES ($1, $2, $3, $4, $5, $6);
+  `;
 
-const updateContactInfo = `
-UPDATE contact_info
-  SET primary_phone_number = $1, secondary_phone_number = $2, emergency_contact = $3, emergency_contact_relationship = $4, email = $5
-  WHERE person_id = $6`;
+  const result = await dbQuery(query, [
+    person_id,
+    primary_phone_number,
+    secondary_phone_number,
+    emergency_contact,
+    emergency_contact_relationship,
+    email,
+  ]);
+  return result;
+};
 
-const insertMedicalHistory = `
-INSERT INTO medical_history (person_id, current_medications, allergies, chronic_conditions)
-  VALUES ($1, $2, $3, $4);
-`;
+const updateContactInfo = async () => {
+  const query = `
+  UPDATE contact_info
+    SET primary_phone_number = $1, secondary_phone_number = $2, emergency_contact = $3, emergency_contact_relationship = $4, email = $5
+    WHERE person_id = $6`;
 
-const insertPatientVisitInfo = `
-INSERT INTO patient_visit_info (person_id, reason_for_visit, patient_pain_rating, symptoms)
-  VALUES ($1, $2, $3, $4);
-`;
+  const result = await dbQuery(query, [
+    primary_phone_number,
+    secondary_phone_number,
+    emergency_contact,
+    emergency_contact_relationship,
+    email,
+    person_id,
+  ]);
+  return result;
+};
+
+const insertMedicalHistory = async () => {
+  const query = `
+  INSERT INTO medical_history (person_id, current_medications, allergies, chronic_conditions)
+    VALUES ($1, $2, $3, $4);
+  `;
+
+  const result = await dbQuery(query, [
+    person_id,
+    current_medications,
+    allergies,
+    chronic_conditions,
+  ]);
+  return result;
+};
+
+const insertPatientVisitInfo = async () => {
+  const query = `
+  INSERT INTO patient_visit_info (person_id, reason_for_visit, patient_pain_rating, symptoms)
+    VALUES ($1, $2, $3, $4);
+  `;
+
+  const result = await dbQuery(query, [
+    person_id,
+    reason_for_visit,
+    patient_pain_rating,
+    symptoms,
+  ]);
+  return result;
+};
 
 const getPersonIDByHealthCardNumber = async (healthCardNumber) => {
   const query = `
@@ -102,25 +149,30 @@ const getContactInfoByPersonID = async (personID) => {
   return result && result.rowCount !== 0 ? result.rows[0] : null;
 };
 
-const getPersonInfoByID = `
-SELECT
-  p.id AS person_id,
-  p.firstname,
-  p.lastname,
-  p.date_of_birth,
-  p.gender,
-  p.address,
-  h.health_card_number,
-  c.primary_phone_number,
-  c.secondary_phone_number,
-  c.emergency_contact,
-  c.emergency_contact_relationship,
-  c.email 
-FROM person p
-LEFT JOIN health_card_info h ON p.id = h.person_id
-LEFT JOIN contact_info c ON p.id = c.person_id
-WHERE p.id = $1;
-`;
+const getPersonInfoByID = async (id) => {
+  const query = `
+  SELECT
+    p.id AS person_id,
+    p.firstname,
+    p.lastname,
+    p.date_of_birth,
+    p.gender,
+    p.address,
+    h.health_card_number,
+    c.primary_phone_number,
+    c.secondary_phone_number,
+    c.emergency_contact,
+    c.emergency_contact_relationship,
+    c.email 
+  FROM person p
+  LEFT JOIN health_card_info h ON p.id = h.person_id
+  LEFT JOIN contact_info c ON p.id = c.person_id
+    WHERE p.id = $1;
+  `;
+
+  const result = await dbQuery(query, [id]);
+  return result;
+};
 
 const getPersonInfoByHealthCardNumber = async (healthCardNumber) => {
   const query = `
@@ -163,37 +215,30 @@ export {
 };
 
 // {
+//   healthCardInfo: { healthCardNumber: '3732-743-243-HS' },
 //   patientInfo: {
-//     healthCardInfo: { healthCardNumber: '3732-743-243-HS' },
 //     firstName: 'John',
 //     lastName: 'Doe',
-//     dateOfBirth: '2024-12-10',
+//     dateOfBirth: '2024-12-11',
 //     gender: 'Male',
-//     address: '2401 City Park Dr',
-//     contactInformation: {
-//       primaryPhoneNumber: '+1 505-586-5454',
-//       secondaryPhoneNumber: '+1 455-555-5545',
-//       emergencyContact: '+1 543-543-5345',
-//       emergencyContactRelationship: 'Necessitatibus itaqu',
-//       email: '123john@test.ca'
-//     },
-//     locked: false
+//     address: '2401 City Park Dr'
+//   },
+//   contactInfo: {
+//     primaryPhoneNumber: '+1 453-453-4543',
+//     secondaryPhoneNumber: '',
+//     emergencyContact: '+1 534-543-5345',
+//     emergencyContactRelationship: '',
+//     email: ''
+//   },
+//   medicalHistory: {
+//     currentMedications: [ 'hgfhgf', 'hgfktuhgk' ],
+//     allergies: 'vczv',
+//     chronicConditions: 'nvcnc'
 //   },
 //   visitInfo: {
-//     visitInfo: {
-//       reasonForVisit: '',
-//       patientPainRating: 0,
-//       symptoms: [],
-//       medicalHistory: [Object]
-//     },
-//     reasonForVisit: 'hfdgf',
-//     patientPainRating: 3,
-//     symptoms: [ 'joe' ],
-//     medicalHistory: {
-//       currentMedications: [Array],
-//       allergies: 'gfdg',
-//       chronicConditions: 'gdfg'
-//     }
+//     reasonForVisit: 'fdsf',
+//     painRating: 5,
+//     symptoms: [ 'dasdasd', 'asfsagfag' ]
 //   },
-//   patientAcknowledgement: '2024-12-19T01:43:03.695Z'
+//   patientAcknowledgement: '2025-01-03T02:12:36.142Z'
 // }
