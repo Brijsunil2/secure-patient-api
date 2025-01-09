@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS patient_visit_info (
   person_id INTEGER REFERENCES person(id) ON DELETE CASCADE,
   reason_for_visit TEXT NOT NULL,
   patient_pain_rating INTEGER NOT NULL,
-  symptoms TEXT
+  symptoms TEXT,
+  patient_acknowledgement DATE NOT NULL
 );
 `;

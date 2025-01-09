@@ -52,7 +52,14 @@ const insertHealthCardInfo = async (person_id, health_card_info) => {
   return result;
 };
 
-const insertContactInfo = async () => {
+const insertContactInfo = async (
+  person_id,
+  primary_phone_number,
+  secondary_phone_number,
+  emergency_contact,
+  emergency_contact_relationship,
+  email
+) => {
   const query = `
   INSERT INTO contact_info (person_id, primary_phone_number, secondary_phone_number, emergency_contact, emergency_contact_relationship, email)
     VALUES ($1, $2, $3, $4, $5, $6);
@@ -69,7 +76,14 @@ const insertContactInfo = async () => {
   return result;
 };
 
-const updateContactInfo = async () => {
+const updateContactInfo = async (
+  primary_phone_number,
+  secondary_phone_number,
+  emergency_contact,
+  emergency_contact_relationship,
+  email,
+  person_id
+) => {
   const query = `
   UPDATE contact_info
     SET primary_phone_number = $1, secondary_phone_number = $2, emergency_contact = $3, emergency_contact_relationship = $4, email = $5
@@ -86,7 +100,12 @@ const updateContactInfo = async () => {
   return result;
 };
 
-const insertMedicalHistory = async () => {
+const insertMedicalHistory = async (
+  person_id,
+  current_medications,
+  allergies,
+  chronic_conditions
+) => {
   const query = `
   INSERT INTO medical_history (person_id, current_medications, allergies, chronic_conditions)
     VALUES ($1, $2, $3, $4);
@@ -101,10 +120,16 @@ const insertMedicalHistory = async () => {
   return result;
 };
 
-const insertPatientVisitInfo = async () => {
+const insertPatientVisitInfo = async (
+  person_id,
+  reason_for_visit,
+  patient_pain_rating,
+  symptoms,
+  patient_acknowledgement
+) => {
   const query = `
-  INSERT INTO patient_visit_info (person_id, reason_for_visit, patient_pain_rating, symptoms)
-    VALUES ($1, $2, $3, $4);
+  INSERT INTO patient_visit_info (person_id, reason_for_visit, patient_pain_rating, symptoms, patient_acknowledgement)
+    VALUES ($1, $2, $3, $4, $5);
   `;
 
   const result = await dbQuery(query, [
@@ -112,6 +137,7 @@ const insertPatientVisitInfo = async () => {
     reason_for_visit,
     patient_pain_rating,
     symptoms,
+    patient_acknowledgement,
   ]);
   return result;
 };
