@@ -13,7 +13,7 @@ export const createHealthCardInfoTable = `
 CREATE TABLE IF NOT EXISTS health_card_info (
   id SERIAL PRIMARY KEY,
   person_id INTEGER REFERENCES person(id) ON DELETE CASCADE,
-  health_card_number VARCHAR(15) UNIQUE NOT NULL
+  health_card_number VARCHAR(15) NOT NULL
 );
 `;
 
